@@ -4,6 +4,11 @@ import torch
 import numpy as np
 import streamlit as st
 import pdfplumber
+import gensim
+from gensim.models.doc2vec import Doc2Vec, TaggedDocument
+from nltk.tokenize import word_tokenize
+from gensim.models.doc2vec import Doc2Vec
+import nltk
 
 def extract_data(feed):
     data = ""
@@ -20,7 +25,7 @@ def mean_pooling(model_output, attention_mask):
     return torch.sum(token_embeddings * input_mask_expanded, 1) / torch.clamp(input_mask_expanded.sum(1), min=1e-9)
 
 @st.cache
-def get_embeddings(sentences):
+def get_HF_embeddings(sentences):
 
   # Load model from HuggingFace Hub
   tokenizer = AutoTokenizer.from_pretrained('sentence-transformers/bert-base-nli-mean-tokens')
@@ -40,26 +45,51 @@ def get_embeddings(sentences):
   print(embeddings)
   return embeddings
 
+@st.cache
+def get_doc2vec_embeddings(JD, text_resume):
+    nltk.download("punkt")
+    data = [JD]
+
+    tagged_data = [TaggedDocument(words=word_tokenize(_d.lower()), tags=[str(i)]) for i, _d in enumerate(data)]
+    #print (tagged_data)
+
+    model = gensim.models.doc2vec.Doc2Vec(vector_size=512, min_count=3, epochs=80)
+    model.build_vocab(tagged_data)
+    model.train(tagged_data, total_examples=model.corpus_count, epochs=80)
+    JD_embeddings = np.transpose(model.docvecs['0'].reshape(-1,1))
+    text_resume = word_tokenize(text_resume.lower())
+    resume_embeddings = model.infer_vector(text_resume)
+    resume_embeddings = np.transpose(resume_embeddings.reshape(-1,1))
+    return (JD_embeddings, resume_embeddings)
+
 
 def cosine(embeddings1, embeddings2):
   # get the match percentage
   matchPercentage = cosine_similarity(np.array(embeddings1), np.array(embeddings2))
   matchPercentage = np.round(matchPercentage, 4)*100 # round to two decimal
   print("Your resume matches about" + str(matchPercentage[0])+ "% of the job description.")
-  return matchPercentage[0][0]
+  return str(matchPercentage[0][0])
 
-def compare(uploaded_file, JD):
 
-    JD_embeddings = None
-    resume_embeddings = None
+def compare(uploaded_file, JD, flag = 'HuggingFace-BERT'):
 
-    if uploaded_file is not None:
-        df = extract_data(uploaded_file)
-        resume_embeddings = get_embeddings(df)
+    if flag == 'HuggingFace-BERT':
+        JD_embeddings = None
+        resume_embeddings = None
 
-    if JD is not None:
-        JD_embeddings = get_embeddings(JD)
+        if uploaded_file is not None:
+            df = extract_data(uploaded_file)
+            resume_embeddings = get_HF_embeddings(df)
+        if JD is not None:
+            JD_embeddings = get_HF_embeddings(JD)
+        if JD_embeddings is not None and resume_embeddings is not None:
+            cos = cosine(resume_embeddings, JD_embeddings)
+            st.write("Cosine similarity is: ", cos)
 
-    if JD_embeddings is not None and resume_embeddings is not None:
+    else:
+        if uploaded_file is not None:
+            df = extract_data(uploaded_file)
+
+        JD_embeddings, resume_embeddings = get_doc2vec_embeddings(JD, df)
         cos = cosine(resume_embeddings, JD_embeddings)
         st.write("Cosine similarity is: ", cos)
