@@ -15,6 +15,8 @@ with st.sidebar:
     ['HuggingFace-BERT', 'Doc2Vec'])
     flag = options
 
+#main content
+st.title("Applicant Tracking System")
 uploaded_file = st.file_uploader('Choose your resume.pdf file: ', type="pdf")
 st.write(uploaded_file)
 JD = st.text_area("Enter the job description: ")
