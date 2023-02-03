@@ -1,9 +1,10 @@
 # importing required modules
 import streamlit as st
 import pdfplumber
-from Resume_Scanner import cosine_similarity, compare
+from Resume_Scanner import compare
 
 comp_pressed = False
+score = 0
 
 #Sidebar
 flag = 'HuggingFace-BERT'
@@ -24,11 +25,11 @@ with tab1:
     JD = st.text_area("**Enter the job description:**")
     comp_pressed = st.button("Compare!")
     if comp_pressed:
-        compare(uploaded_file, JD, flag)
+        score = compare(uploaded_file, JD, flag)
 
 with tab2:
     st.header("Results")
     if comp_pressed:
-        yo = 0
+        st.write("Cosine similarity is: ", score)
     else:
         st.write("#### Throw in some Resumes to see the score :)")

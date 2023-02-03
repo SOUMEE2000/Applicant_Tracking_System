@@ -1,6 +1,6 @@
 import streamlit as st
 import pdfplumber
-from Models import get_HF_embeddings, cosine, get_dco2vec_embeddings
+from Models import get_HF_embeddings, cosine, get_doc2vec_embeddings
 
 
 def extract_data(feed):
@@ -25,7 +25,7 @@ def compare(uploaded_file, JD, flag = 'HuggingFace-BERT'):
             JD_embeddings = get_HF_embeddings(JD)
         if JD_embeddings is not None and resume_embeddings is not None:
             cos = cosine(resume_embeddings, JD_embeddings)
-            st.write("Score is: ", cos)
+            #st.write("Score is: ", cos)
 
     else:
         if uploaded_file is not None:
@@ -33,4 +33,5 @@ def compare(uploaded_file, JD, flag = 'HuggingFace-BERT'):
 
         JD_embeddings, resume_embeddings = get_doc2vec_embeddings(JD, df)
         cos = cosine(resume_embeddings, JD_embeddings)
-        st.write("Cosine similarity is: ", cos)
+        #st.write("Cosine similarity is: ", cos)
+    return cos
