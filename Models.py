@@ -39,7 +39,8 @@ def get_HF_embeddings(sentences):
 def get_doc2vec_embeddings(JD, text_resume):
     nltk.download("punkt")
     data = [JD]
-
+    resume_embeddings = []
+    
     tagged_data = [TaggedDocument(words=word_tokenize(_d.lower()), tags=[str(i)]) for i, _d in enumerate(data)]
     #print (tagged_data)
 
@@ -47,15 +48,20 @@ def get_doc2vec_embeddings(JD, text_resume):
     model.build_vocab(tagged_data)
     model.train(tagged_data, total_examples=model.corpus_count, epochs=80)
     JD_embeddings = np.transpose(model.docvecs['0'].reshape(-1,1))
-    text_resume = word_tokenize(text_resume.lower())
-    resume_embeddings = model.infer_vector(text_resume)
-    resume_embeddings = np.transpose(resume_embeddings.reshape(-1,1))
+
+    for i in text_resume:
+        text = word_tokenize(i.lower())
+        embeddings = model.infer_vector(text)
+        resume_embeddings.append(np.transpose(embeddings.reshape(-1,1)))
     return (JD_embeddings, resume_embeddings)
 
 
 def cosine(embeddings1, embeddings2):
   # get the match percentage
-  matchPercentage = cosine_similarity(np.array(embeddings1), np.array(embeddings2))
-  matchPercentage = np.round(matchPercentage, 4)*100 # round to two decimal
-  print("Your resume matches about" + str(matchPercentage[0])+ "% of the job description.")
-  return str(matchPercentage[0][0])
+  score_list = []
+  for i in embeddings1:
+      matchPercentage = cosine_similarity(np.array(i), np.array(embeddings2))
+      matchPercentage = np.round(matchPercentage, 4)*100 # round to two decimal
+      print("Your resume matches about" + str(matchPercentage[0])+ "% of the job description.")
+      score_list.append(str(matchPercentage[0][0]))
+  return score_list

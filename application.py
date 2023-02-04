@@ -19,17 +19,26 @@ tab1, tab2 = st.tabs(["**Home**","**Results**"])
 
 with tab1:
     st.title("Applicant Tracking System")
-    uploaded_file = st.file_uploader('**Choose your resume.pdf file:** ', type="pdf")
-    st.write(uploaded_file)
+    uploaded_files = st.file_uploader('**Choose your resume.pdf file:** ', type="pdf", accept_multiple_files = True)
+    #st.write(uploaded_files)
     st.write("")
     JD = st.text_area("**Enter the job description:**")
     comp_pressed = st.button("Compare!")
     if comp_pressed:
-        score = compare(uploaded_file, JD, flag)
+        #st.write(uploaded_files[0].name)
+        score = compare(uploaded_files, JD, flag)
 
 with tab2:
     st.header("Results")
+    my_dict = {}
     if comp_pressed:
-        st.write("Cosine similarity is: ", score)
+        for i in range(len(score)):
+            my_dict[uploaded_files[i].name] = score[i]
+        print(my_dict)
+        sorted_dict = dict(sorted(my_dict.items()))
+        print(sorted_dict)
+        for i in sorted_dict.items():
+            with st.expander(str(i[0])):
+                st.write("Score is: ", i[1])
     else:
         st.write("#### Throw in some Resumes to see the score :)")
