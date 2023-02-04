@@ -1,0 +1,6 @@
+streamlit
+transformers
+pytorch
+pdfplumber
+install nltk
+gensim
