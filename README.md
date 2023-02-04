@@ -10,16 +10,21 @@ This app is built for employers looking for candidates against a particular job 
 <img src = "https://github.com/SOUMEE2000/Resume_Scanner/blob/main/Demo/Interface.png" height=400>
 <img src = "https://github.com/SOUMEE2000/Applicant_Tracking_System/blob/main/Demo/Interface_Results.png" height = 400 width = 800>
 
-## Instructions
+## Usage
 
-**Requirements:**
 ```
-pip install streamlit
-pip install transformers
-pip install pytorch
-pip install pdfplumber
-pip install nltk
-pip install gensim
+pip install -r requirements.txt
 ```
 **Run**: ``` streamlit run application.py```
+
+**Requirements:**
+
+streamlit
+transformers
+pytorch
+pdfplumber
+install nltk
+gensim
+
+
 
