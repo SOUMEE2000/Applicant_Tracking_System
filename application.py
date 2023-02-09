@@ -3,6 +3,7 @@ import streamlit as st
 import pdfplumber
 from Resume_Scanner import compare
 
+# global values
 comp_pressed = False
 score = 0
 
@@ -17,6 +18,7 @@ with st.sidebar:
 #main content
 tab1, tab2 = st.tabs(["**Home**","**Results**"])
 
+# Tab Home
 with tab1:
     st.title("Applicant Tracking System")
     uploaded_files = st.file_uploader('**Choose your resume.pdf file:** ', type="pdf", accept_multiple_files = True)
@@ -28,6 +30,7 @@ with tab1:
         #st.write(uploaded_files[0].name)
         score = compare(uploaded_files, JD, flag)
 
+# Tab Results
 with tab2:
     st.header("Results")
     my_dict = {}
