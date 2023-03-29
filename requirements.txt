@@ -1,6 +1,6 @@
 streamlit
 transformers
-pytorch
+torch
 pdfplumber
 nltk
 gensim
