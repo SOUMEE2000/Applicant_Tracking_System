@@ -1,4 +1,4 @@
-# importing required modules
+# import required modules
 import streamlit as st
 import pdfplumber
 import Resume_scanner
