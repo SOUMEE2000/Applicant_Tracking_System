@@ -4,3 +4,4 @@ torch
 pdfplumber
 nltk
 gensim
+scikit-learn
