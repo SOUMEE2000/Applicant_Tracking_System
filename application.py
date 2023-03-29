@@ -3,6 +3,7 @@ import streamlit as st
 import pdfplumber
 import Resume_scanner
 
+
 # global values
 comp_pressed = False
 score = 0
