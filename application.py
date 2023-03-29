@@ -1,7 +1,7 @@
 # importing required modules
 import streamlit as st
 import pdfplumber
-from Resume_Scanner import compare
+from Resume_scanner import compare
 
 # global values
 comp_pressed = False
