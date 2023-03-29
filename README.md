@@ -22,14 +22,5 @@ pip install -r requirements.txt
 ```
 **Run**: ``` streamlit run application.py```
 
-**Requirements:**
-
-streamlit
-transformers
-pytorch
-pdfplumber
-install nltk
-gensim
-
 
 
