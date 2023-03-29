@@ -2,5 +2,5 @@ streamlit
 transformers
 pytorch
 pdfplumber
-install nltk
+nltk
 gensim
