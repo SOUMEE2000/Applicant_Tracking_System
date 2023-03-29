@@ -1,7 +1,7 @@
 # importing required modules
 import streamlit as st
 import pdfplumber
-from Resume_Scanner import compare
+import Resume_scanner
 
 # global values
 comp_pressed = False
@@ -12,7 +12,8 @@ flag = 'HuggingFace-BERT'
 with st.sidebar:
     st.markdown('**Which embedding do you want to use**')
     options = st.selectbox('Which embedding do you want to use',
-    ['HuggingFace-BERT', 'Doc2Vec'], label_visibility="collapsed")
+                            ['HuggingFace-BERT', 'Doc2Vec'],
+                            label_visibility="collapsed")
     flag = options
 
 #main content
@@ -28,7 +29,7 @@ with tab1:
     comp_pressed = st.button("Compare!")
     if comp_pressed:
         #st.write(uploaded_files[0].name)
-        score = compare(uploaded_files, JD, flag)
+        score = Resume_Scanner.compare(uploaded_files, JD, flag)
 
 # Tab Results
 with tab2:
