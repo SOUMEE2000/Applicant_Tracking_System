@@ -16,7 +16,7 @@ def mean_pooling(model_output, attention_mask):
     return torch.sum(token_embeddings * input_mask_expanded, 1) / torch.clamp(input_mask_expanded.sum(1), min=1e-9)
 
 
-@st.cache
+@st.cache_resource
 def get_HF_embeddings(sentences):
 
   # Load model from HuggingFace Hub
@@ -35,7 +35,7 @@ def get_HF_embeddings(sentences):
   return embeddings
 
 
-@st.cache
+@st.cache_data
 def get_doc2vec_embeddings(JD, text_resume):
     nltk.download("punkt")
     data = [JD]
