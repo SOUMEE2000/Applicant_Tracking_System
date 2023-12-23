@@ -1,7 +1,7 @@
 # import required modules
 import streamlit as st
 import pdfplumber
-import Resume_scanner
+from Resume_scanner import compare
 
 
 # global values
@@ -30,7 +30,7 @@ with tab1:
     comp_pressed = st.button("Compare!")
     if comp_pressed:
         #st.write(uploaded_files[0].name)
-        score = Resume_Scanner.compare(uploaded_files, JD, flag)
+        score = compare(uploaded_files, JD, flag)
 
 # Tab Results
 with tab2:
