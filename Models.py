@@ -30,8 +30,8 @@ def get_HF_embeddings(sentences):
   # Perform pooling. In this case, max pooling.
   embeddings = mean_pooling(model_output, encoded_input['attention_mask'])
 
-  print("Sentence embeddings:")
-  print(embeddings)
+  # print("Sentence embeddings:")
+  # print(embeddings)
   return embeddings
 
 
