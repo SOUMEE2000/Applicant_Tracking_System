@@ -20,6 +20,3 @@ def compare(resume_texts, JD_text, flag='HuggingFace-BERT'):
     else:
         # Handle other cases
         pass
-
-# Additional functions and logic from Resume_scanner.py
-# ...

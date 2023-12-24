@@ -1,6 +1,8 @@
 import sys
 import streamlit as st
-import warnings
+import pdfplumber
+from Resume_scanner import compare
+
 
 def extract_pdf_data(file_path):
     data = ""
@@ -11,15 +13,15 @@ def extract_pdf_data(file_path):
                 data += text
     return data
 
+
 def extract_text_data(file_path):
     with open(file_path, 'r') as file:
         data = file.read()
     return data
 
+
 # Command-line argument processing
 if len(sys.argv) > 1:
-    import pdfplumber
-    from Resume_scanner import compare
 
     if len(sys.argv) == 3:
         resume_path = sys.argv[1]
@@ -29,34 +31,32 @@ if len(sys.argv) > 1:
         jd_data = extract_text_data(jd_path)
 
         result = compare([resume_data], jd_data, flag='HuggingFace-BERT')
-    
-    sys.exit()
 
-# Streamlit UI
-if 'streamlit' not in sys.modules:
-    import streamlit as st
+    sys.exit()
 
 # Sidebar
 flag = 'HuggingFace-BERT'
 with st.sidebar:
     st.markdown('**Which embedding do you want to use**')
     options = st.selectbox('Which embedding do you want to use',
-                            ['HuggingFace-BERT', 'Doc2Vec'],
-                            label_visibility="collapsed")
+                           ['HuggingFace-BERT', 'Doc2Vec'],
+                           label_visibility="collapsed")
     flag = options
 
 # Main content
-tab1, tab2 = st.tabs(["**Home**","**Results**"])
+tab1, tab2 = st.tabs(["**Home**", "**Results**"])
 
 # Tab Home
 with tab1:
     st.title("Applicant Tracking System")
-    uploaded_files = st.file_uploader('**Choose your resume.pdf file:** ', type="pdf", accept_multiple_files = True)
+    uploaded_files = st.file_uploader(
+        '**Choose your resume.pdf file:** ', type="pdf", accept_multiple_files=True)
     JD = st.text_area("**Enter the job description:**")
     comp_pressed = st.button("Compare!")
     if comp_pressed and uploaded_files:
         # Streamlit file_uploader gives file-like objects, not paths
-        uploaded_file_paths = [extract_pdf_data(file) for file in uploaded_files]
+        uploaded_file_paths = [extract_pdf_data(
+            file) for file in uploaded_files]
         score = compare(uploaded_file_paths, JD, flag)
 
 # Tab Results
